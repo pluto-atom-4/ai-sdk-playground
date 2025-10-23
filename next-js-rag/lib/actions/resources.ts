@@ -1,13 +1,12 @@
 'use server';
 
-import { generateEmbeddings } from "../db/ai/embedding";
 import {
   NewResourceParams,
   insertResourceSchema,
   resources,
 } from '@/lib/db/schema/resources';
 import { db } from '../db';
-
+import { generateEmbeddings } from "../db/ai/embedding";
 import { embeddings as embeddingsTable } from '../db/schema/embedding';
 
 export const createResource = async (input: NewResourceParams) => {

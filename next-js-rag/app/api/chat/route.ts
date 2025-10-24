@@ -1,4 +1,5 @@
 import { createResource } from '@/lib/actions/resources';
+import { findRelevantContent } from "@/lib/ai/embedding";
 import { openai } from '@ai-sdk/openai';
 import {
   convertToModelMessages,
@@ -32,6 +33,13 @@ export async function POST(req: Request) {
             .describe('the content or resource to add to the knowledge base'),
         }),
         execute: async ({ content }) => createResource({ content }),
+      }),
+      getInformation: tool({
+        description: `get information from your knowledge base to answer questions.`,
+        inputSchema: z.object({
+          question: z.string().describe('the users question'),
+        }),
+        execute: async ({ question }) => findRelevantContent(question),
       }),
     },
   });

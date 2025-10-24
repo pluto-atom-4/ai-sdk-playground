@@ -3,7 +3,6 @@
 import { useChat } from '@ai-sdk/react';
 import { useState } from 'react';
 
-
 export default function Chat() {
   const [input, setInput] = useState('');
   const { messages, sendMessage } = useChat();
@@ -14,20 +13,22 @@ export default function Chat() {
           <div key={m.id} className="whitespace-pre-wrap">
             <div>
               <div className="font-bold">{m.role}</div>
-              {m.parts.map(part => {
+              {m.parts.map((part, idx) => {
                 switch (part.type) {
                   case 'text':
                     return <p>{part.text}</p>;
                   case 'tool-addResource':
                   case 'tool-getInformation':
                     return (
-                      <p>
-                        call{part.state === 'output-available' ? 'ed' : 'ing'}{' '}
-                        tool: {part.type}
+                      <div key={idx} >
+                        <div>
+                          call{part.state === 'output-available' ? 'ed' : 'ing'}{' '}
+                          tool: {part.type}
+                        </div>
                         <pre className="my-4 bg-zinc-100 p-2 rounded-sm">
                           {JSON.stringify(part.input, null, 2)}
                         </pre>
-                      </p>
+                      </div>
                     );
                 }
               })}

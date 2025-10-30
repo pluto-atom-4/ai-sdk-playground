@@ -10,5 +10,7 @@
       "maxDuration": 60
     }
   },
+  "buildCommand": "pnpm run vercel-build",
+  "installCommand": "pnpm install",
   "outputDirectory": "dist"
 }

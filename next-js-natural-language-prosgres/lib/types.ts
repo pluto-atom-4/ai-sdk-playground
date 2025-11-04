@@ -18,6 +18,8 @@ export const explanationSchema = z.object({
   explanation: z.string(),
 });
 
+export const explanationsSchema = z.array(explanationSchema);
+
 export type QueryExplanation = z.infer<typeof explanationSchema>;
 export const configSchema = z
   .object({

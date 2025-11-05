@@ -1,10 +1,16 @@
 "use server";
 
-import { sql } from "@vercel/postgres";
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
 import { Config, configSchema, explanationsSchema, Result } from '@/lib/types';
+
+import { Pool } from "pg";
+
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URL,
+});
+
 
 /**import { explanationSchema } from '@/lib/types';
  *
@@ -15,6 +21,10 @@ import { Config, configSchema, explanationsSchema, Result } from '@/lib/types';
  */
 export const runGeneratedSQLQuery = async (query: string) => {
   "use server";
+
+  console.log("🔍 runGeneratedSQLQuery called with query:", query);
+  console.log("📍 Breakpoint location - function entry");
+
   // Ensure the query is a SELECT statement. Otherwise, throw an error
   if (
     !query.trim().toLowerCase().startsWith("select") ||
@@ -30,10 +40,11 @@ export const runGeneratedSQLQuery = async (query: string) => {
   ) {
     throw new Error("Only SELECT queries are allowed");
   }
-
+  console.log("✅ Query validation passed");
   let data: any;
   try {
-    data = await sql.query(query);
+    const result = await pool.query(query);
+    data = result;
   } catch (e: any) {
     if (e.message.includes('relation "unicorns" does not exist')) {
       console.log(

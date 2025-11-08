@@ -1,33 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Computer Use Chatbot with Anthropic & E2B
 
-## Getting Started
+This project demonstrates how to build a computer use chatbot using Anthropic's Claude with the AI SDK and E2B code execution sandbox.
 
-First, run the development server:
+## Features
+
+- 🤖 **Anthropic Claude Integration**: Uses Claude 3.5 Sonnet for intelligent responses
+- 💻 **Code Execution**: Executes JavaScript code in a secure E2B sandbox
+- 🔄 **Streaming Responses**: Real-time streaming of AI responses
+- 💬 **Conversational Memory**: Maintains conversation context across multiple interactions
+- 🛠️ **Tool Use**: Automatically calls code execution tools when needed
+
+## Setup
+
+### 1. Install Dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+```
+
+### 2. Set Up Environment Variables
+
+Create or update your `.env` file with the following:
+
+```env
+# Anthropic API Key (required for Claude models)
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+# E2B API Key (required for code execution sandbox)
+E2B_API_KEY=your_e2b_api_key_here
+```
+
+#### Getting API Keys:
+
+- **Anthropic API Key**: Get it from [https://console.anthropic.com/](https://console.anthropic.com/)
+- **E2B API Key**: Get it from [https://e2b.dev/](https://e2b.dev/)
+
+### 3. Run the Chatbot
+
+```bash
+pnpm tsx index.ts
+```
+
+## Usage
+
+Once running, you can:
+
+1. Type your message and press Enter
+2. The AI can execute code in the sandbox when needed
+3. Type `exit` or `quit` to end the session
+
+### Example Interactions
+
+```
+You: Calculate the fibonacci sequence up to 10 numbers
+[Tool Call: computer]
+[Tool Result: {"success":true,"results":[0,1,1,2,3,5,8,13,21,34]}]
+Assistant: Here are the first 10 Fibonacci numbers: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+
+You: Create a simple plot of these numbers
+[Tool Call: computer]
+Assistant: I've created a visualization of the Fibonacci sequence...
+```
+
+## Next.js Development
+
+This is also a [Next.js](https://nextjs.org) project. To run the web interface:
+
+```bash
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [AI SDK Documentation](https://sdk.vercel.ai/docs)
+- [AI SDK Computer Use Guide](https://ai-sdk.dev/cookbook/guides/computer-use)
+- [Anthropic Claude API](https://docs.anthropic.com/)
+- [E2B Code Interpreter](https://e2b.dev/docs)
+- [Next.js Documentation](https://nextjs.org/docs)
 
 ## Deploy on Vercel
 

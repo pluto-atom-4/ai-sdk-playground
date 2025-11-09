@@ -1,34 +1,22 @@
 {
   "name": "nextjs-computer-use",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "Computer Use Chatbot with Anthropic and E2B",
+  "main": "index.ts",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "tsx index.ts",
+    "dev": "tsx watch index.ts"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^2.0.41",
-    "@ai-sdk/openai": "3.0.0-beta.55",
-    "@e2b/code-interpreter": "^2.2.0",
-    "ai": "6.0.0-beta.94",
+    "@ai-sdk/anthropic": "^2.0.42",
+    "ai": "^5.0.89",
     "dotenv": "^17.2.3",
-    "next": "16.0.1",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
+    "e2b": "^1.3.6",
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.1",
-    "tailwindcss": "^4",
-    "tsx": "^4.20.6",
-    "typescript": "^5"
+    "@types/node": "^20.10.0",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.0"
   }
 }

@@ -1,7 +1,7 @@
 import { anthropic } from '@ai-sdk/anthropic';
 import { CoreMessage, streamText } from 'ai';
 import readline from 'readline';
-import { e2bTools, cleanupSandbox } from './lib/e2b/tools';
+import { e2bTools, toolExecutors, cleanupSandbox } from './lib/e2b/tools';
 import * as dotenv from 'dotenv';
 
 // Load environment variables
@@ -40,66 +40,61 @@ async function main() {
 
       try {
         const result = streamText({
-          model: anthropic('claude-3-5-sonnet-20241022', {
-            cacheControl: true,
-          }),
+          model: anthropic("claude-sonnet-4-5"),
           messages,
-          tools: e2bTools,
-          maxSteps: 10,
+          // tools: Object.values(e2bTools), // Temporarily disabled
         });
 
         process.stdout.write('\nAssistant: ');
-        let fullResponse = '';
 
         // Handle streaming response
         for await (const part of result.fullStream) {
           if (part.type === 'text-delta') {
-            process.stdout.write(part.textDelta);
-            fullResponse += part.textDelta;
+            process.stdout.write(part.text);
           } else if (part.type === 'tool-call') {
             console.log(`\n[Tool Call: ${part.toolName}]`);
-          } else if (part.type === 'tool-result') {
-            console.log(`[Tool Result: ${JSON.stringify(part.result).substring(0, 100)}...]`);
+
+            // Execute the tool manually
+            const toolName = part.toolName;
+            const args = part.input;
+
+            let toolResult;
+            switch (toolName) {
+              case 'executeCode':
+                toolResult = await toolExecutors.executeCode(args as any);
+                break;
+              case 'writeFile':
+                toolResult = await toolExecutors.writeFile(args as any);
+                break;
+              case 'readFile':
+                toolResult = await toolExecutors.readFile(args as any);
+                break;
+              case 'listFiles':
+                toolResult = await toolExecutors.listFiles(args as any);
+                break;
+              default:
+                toolResult = { error: `Unknown tool: ${toolName}` };
+            }
+
+            console.log(`[Tool Result: ${JSON.stringify(toolResult).substring(0, 100)}...]`);
           }
         }
 
         console.log('\n');
 
-        // Get the final text and tool calls
-        const { text, toolCalls, toolResults } = await result;
+        // Get the final response
+        const finalResult = await result;
 
         // Add assistant's response to message history
         messages.push({
           role: 'assistant',
-          content: [
-            { type: 'text', text: text },
-            ...toolCalls.map(tc => ({
-              type: 'tool-call' as const,
-              toolCallId: tc.toolCallId,
-              toolName: tc.toolName,
-              args: tc.args,
-            })),
-          ],
+          content: await finalResult.text,
         });
 
-        // Add tool results if any
-        if (toolResults.length > 0) {
-          messages.push({
-            role: 'tool',
-            content: toolResults.map(tr => ({
-              type: 'tool-result' as const,
-              toolCallId: tr.toolCallId,
-              toolName: tr.toolName,
-              result: tr.result,
-            })),
-          });
-        }
-
       } catch (error) {
-        console.error('\nError:', error instanceof Error ? error.message : String(error));
+        console.error('\nError:', error);
       }
 
-      // Ask next question
       askQuestion();
     });
   };
@@ -107,12 +102,20 @@ async function main() {
   askQuestion();
 }
 
-// Handle process termination
+// Handle graceful shutdown
 process.on('SIGINT', async () => {
-  console.log('\n\nCleaning up...');
+  console.log('\nShutting down...');
   await cleanupSandbox();
+  rl.close();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('\nShutting down...');
+  await cleanupSandbox();
+  rl.close();
   process.exit(0);
 });
 
 // Start the chatbot
-main();
+main().catch(console.error);

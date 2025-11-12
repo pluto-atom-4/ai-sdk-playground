@@ -1,13 +1,79 @@
 'use client';
 
-import { useChat } from 'ai/react';
+import { useChat } from '@ai-sdk/react';
+import { CoreMessage } from 'ai';
 import { useState } from 'react';
+import React from 'react';
+
+// Helper function to safely extract message content
+function getMessageContent(message: unknown): string {
+  console.log('Processing message:', message);
+
+  if (typeof message === 'string') {
+    console.log('Message is string:', message);
+    return message;
+  }
+
+  const msg = message as Record<string, unknown>;
+
+  // Check for content property (standard format from useChat)
+  if (typeof msg.content === 'string') {
+    console.log('Message has content string:', msg.content);
+    return msg.content;
+  }
+
+  // If content is an array (for tool calls, etc.)
+  if (Array.isArray(msg.content)) {
+    console.log('Message has content array:', msg.content);
+    return msg.content
+      .map((item: unknown) => {
+        if (typeof item === 'string') return item;
+        const i = item as Record<string, unknown>;
+        if (i.type === 'text') return typeof i.text === 'string' ? i.text : '';
+        return '';
+      })
+      .filter(Boolean)
+      .join('');
+  }
+
+  // Fallback for other structures
+  console.log('Message structure:', JSON.stringify(message));
+  return JSON.stringify(message);
+}
 
 export function ChatInterface() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({
-      api: '/api/chat',
-    });
+  const { messages, append, status, error } = useChat({
+    maxSteps: 5,
+  });
+  const [input, setInput] = useState('');
+  // isLoading is true when status is anything other than 'ready' (e.g., 'submitted', streaming, etc.)
+  const isLoading = status !== 'ready';
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log('Messages:', messages);
+    console.log('Status:', status);
+    if (error) console.error('Error:', error);
+  }, [messages, status, error]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    console.log('Appending message:', input);
+    console.log('Current messages before append:', messages);
+
+    const message: CoreMessage = {
+      content: input,
+      role: 'user',
+    };
+    await append(message);
+    setInput('');
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
 
   return (
     <div className="flex flex-col h-screen w-full max-w-4xl mx-auto">
@@ -35,7 +101,9 @@ export function ChatInterface() {
           </div>
         )}
 
-        {messages.map((message) => (
+        {messages.map((message) => {
+          console.log('Rendering message:', message);
+          return (
           <div
             key={message.id}
             className={`flex ${
@@ -49,10 +117,13 @@ export function ChatInterface() {
                   : 'bg-white text-gray-800 border border-gray-200 rounded-bl-none'
               }`}
             >
-              <p className="whitespace-pre-wrap">{message.content}</p>
+              <p className="whitespace-pre-wrap">
+                {getMessageContent(message)}
+              </p>
             </div>
           </div>
-        ))}
+        );
+        })}
 
         {isLoading && (
           <div className="flex justify-start">

@@ -12,6 +12,6 @@ export async function POST(req: Request) {
     system: 'You are a helpful AI assistant powered by Gemini 2.5.',
   });
 
-  return result.toDataStreamResponse();
+  return result.toTextStreamResponse();
 }
 

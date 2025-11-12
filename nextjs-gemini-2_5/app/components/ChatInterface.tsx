@@ -1,7 +1,6 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { CoreMessage } from 'ai';
 import { useState } from 'react';
 import React from 'react';
 
@@ -16,35 +15,28 @@ function getMessageContent(message: unknown): string {
 
   const msg = message as Record<string, unknown>;
 
-  // Check for content property (standard format from useChat)
+  // Check for content property
   if (typeof msg.content === 'string') {
     console.log('Message has content string:', msg.content);
     return msg.content;
   }
 
-  // If content is an array (for tool calls, etc.)
-  if (Array.isArray(msg.content)) {
-    console.log('Message has content array:', msg.content);
-    return msg.content
-      .map((item: unknown) => {
-        if (typeof item === 'string') return item;
-        const i = item as Record<string, unknown>;
-        if (i.type === 'text') return typeof i.text === 'string' ? i.text : '';
-        return '';
-      })
-      .filter(Boolean)
-      .join('');
+  // Check for parts array
+  if (Array.isArray(msg.parts)) {
+    console.log('Message has parts array:', msg.parts);
+    return msg.parts.map((part: unknown) => {
+      if (typeof part === 'string') return part;
+      const p = part as Record<string, unknown>;
+      return typeof p.text === 'string' ? p.text : JSON.stringify(part);
+    }).join('');
   }
 
-  // Fallback for other structures
   console.log('Message structure:', JSON.stringify(message));
   return JSON.stringify(message);
 }
 
 export function ChatInterface() {
-  const { messages, append, status, error } = useChat({
-    maxSteps: 5,
-  });
+  const { messages, sendMessage, status, error } = useChat();
   const [input, setInput] = useState('');
   // isLoading is true when status is anything other than 'ready' (e.g., 'submitted', streaming, etc.)
   const isLoading = status !== 'ready';
@@ -60,14 +52,9 @@ export function ChatInterface() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    console.log('Appending message:', input);
-    console.log('Current messages before append:', messages);
-
-    const message: CoreMessage = {
-      content: input,
-      role: 'user',
-    };
-    await append(message);
+    console.log('Sending message:', { text: input });
+    console.log('Current messages before send:', messages);
+    await sendMessage({ text: input });
     setInput('');
   };
 
@@ -147,7 +134,7 @@ export function ChatInterface() {
             onChange={handleInputChange}
             placeholder="Type your message here..."
             disabled={isLoading}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900 disabled:text-gray-600 placeholder-gray-400"
           />
           <button
             type="submit"

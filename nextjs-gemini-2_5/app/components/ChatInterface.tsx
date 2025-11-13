@@ -15,20 +15,37 @@ function getMessageContent(message: unknown): string {
 
   const msg = message as Record<string, unknown>;
 
-  // Check for content property
+  // Check for content property (string)
   if (typeof msg.content === 'string') {
     console.log('Message has content string:', msg.content);
     return msg.content;
   }
 
-  // Check for parts array
+  // Check for content property (array of text objects)
+  if (Array.isArray(msg.content)) {
+    console.log('Message has content array:', msg.content);
+    const textParts = msg.content
+      .map((item: unknown) => {
+        if (typeof item === 'string') return item;
+        const obj = item as Record<string, unknown>;
+        if (typeof obj.text === 'string') return obj.text;
+        return '';
+      })
+      .filter(Boolean);
+    return textParts.join('');
+  }
+
+  // Check for parts array (alternative structure)
   if (Array.isArray(msg.parts)) {
     console.log('Message has parts array:', msg.parts);
-    return msg.parts.map((part: unknown) => {
-      if (typeof part === 'string') return part;
-      const p = part as Record<string, unknown>;
-      return typeof p.text === 'string' ? p.text : JSON.stringify(part);
-    }).join('');
+    return msg.parts
+      .map((part: unknown) => {
+        if (typeof part === 'string') return part;
+        const p = part as Record<string, unknown>;
+        return typeof p.text === 'string' ? p.text : '';
+      })
+      .filter(Boolean)
+      .join('');
   }
 
   console.log('Message structure:', JSON.stringify(message));
@@ -52,9 +69,13 @@ export function ChatInterface() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    console.log('Sending message:', { text: input });
+    console.log('Sending message:', input);
     console.log('Current messages before send:', messages);
-    await sendMessage({ text: input });
+
+    await sendMessage({
+      role: 'user',
+      parts: [{ type: 'text', text: input }],
+    });
     setInput('');
   };
 

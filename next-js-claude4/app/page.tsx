@@ -25,7 +25,9 @@ export default function Page() {
           <div
             key={message.id}
             className={`p-3 rounded-lg ${
-              message.role === 'user' ? 'bg-blue-50 ml-auto' : 'bg-gray-50'
+              message.role === 'user' 
+                ? 'bg-blue-50 dark:bg-blue-900 dark:text-white ml-auto' 
+                : 'bg-gray-50 dark:bg-gray-800 dark:text-gray-100'
             }`}
           >
             <p className="font-semibold">
@@ -43,7 +45,7 @@ export default function Page() {
                 return (
                   <pre
                     key={index}
-                    className="bg-gray-100 p-2 rounded mt-2 text-xs overflow-x-auto"
+                    className="bg-gray-100 dark:bg-gray-700 dark:text-gray-200 p-2 rounded mt-2 text-xs overflow-x-auto"
                   >
                     <details>
                       <summary className="cursor-pointer">

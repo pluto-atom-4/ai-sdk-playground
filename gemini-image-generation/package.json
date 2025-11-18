@@ -1,0 +1,26 @@
+{
+  "name": "gemini-image-generation",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "image:edit": "tsx src/edit-image.ts",
+    "image:generate": "tsx src/generate-image.ts",
+    "demo": "tsx src/demo-stream-text.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^2.0.36",
+    "ai": "^5.0.94",
+    "dotenv": "^17.2.3"
+  }
+}

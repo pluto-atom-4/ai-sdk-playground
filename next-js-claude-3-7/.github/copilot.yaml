@@ -21,11 +21,12 @@ tools:
   - git bash
 
 # Output directory for generated documentation
-outputDirectory: ./generated/docs-by-copilot
+outputDirectory: ./generated/docs-copilot
 
 # File types that Copilot is allowed to create and modify
 allowedFileTypes:
   - "*.md"
+  -
   - "*.markdown"
 
 # Enable or disable Copilot for this repository

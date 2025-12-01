@@ -133,3 +133,23 @@
   color: var(--foreground);
 }
 
+.messageRole {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.imagePrompt {
+  font-style: italic;
+  color: var(--foreground);
+  opacity: 0.8;
+  padding: 0.5rem 0;
+}

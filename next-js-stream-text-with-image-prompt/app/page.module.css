@@ -153,3 +153,41 @@
   opacity: 0.8;
   padding: 0.5rem 0;
 }
+
+/* Error Alert Styles */
+.errorAlert {
+  padding: 1rem;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  animation: slideIn 0.3s ease-out;
+}
+
+.errorMessage {
+  color: #991b1b;
+  font-weight: 500;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  .errorAlert {
+    background-color: #7f1d1d;
+    border-color: #991b1b;
+  }
+
+  .errorMessage {
+    color: #fecaca;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

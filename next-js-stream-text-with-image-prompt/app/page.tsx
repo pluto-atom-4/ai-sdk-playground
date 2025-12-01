@@ -41,6 +41,7 @@ export default function Page() {
       <div className={styles.wrapper}>
         <h1 className={styles.title}>Chat with AI</h1>
 
+
         <div className={styles.messagesContainer}>
           {messages.map((message) => {
             return (
@@ -85,8 +86,8 @@ export default function Page() {
                             key={`${message.id}-part-${partIndex}`}
                             src={`data:image/png;base64,${outputObj?.image ?? ""}`}
                             alt={inputObj?.prompt ?? "generated image"}
-                            width={400}
-                            height={400}
+                            width={64}
+                            height={64}
                             className={styles.image}
                           />
                         );

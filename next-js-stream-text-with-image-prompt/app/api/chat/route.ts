@@ -20,12 +20,46 @@ export async function POST(request: Request) {
     );
   }
 
-  const { messages }: {messages: UIMessage[]} = await request.json();
+  let messages: UIMessage[];
+  try {
+    const body = await request.json();
+    messages = body.messages;
+
+    if (!Array.isArray(messages)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid request: messages must be an array' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (process.env.NODE_ENV === "development") {
+      console.log("[API] Received request with", messages.length, "messages");
+    }
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("[API] Error parsing request:", err);
+    }
+    return new Response(
+      JSON.stringify({ error: 'Invalid JSON in request body' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // Trim message history to prevent context window overflow.
+  // Keep only the most recent 10 messages to stay well within GPT-4o's context limit.
+  const MAX_MESSAGES = 10;
+  const trimmedMessages = messages.length > MAX_MESSAGES
+    ? messages.slice(messages.length - MAX_MESSAGES)
+    : messages;
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("[API] Using", trimmedMessages.length, "trimmed messages");
+  }
 
   const result = streamText({
-    model: openai("gpt-4o", { apiKey: OPENAI_API_KEY }),
+    model: openai("gpt-4o"),
     system: 'You are a helpful assistant that provides concise answers.',
-    messages: convertToModelMessages(messages),
+    messages: convertToModelMessages(trimmedMessages),
     stopWhen: stepCountIs(5),
     tools,
   });

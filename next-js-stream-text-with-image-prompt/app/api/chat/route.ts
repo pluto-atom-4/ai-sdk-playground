@@ -2,7 +2,7 @@ import { convertToModelMessages, type InferUITools, stepCountIs, streamText, typ
 
 import { openai } from "@ai-sdk/openai";
 
-import { generateImage} from "@/tools/generate-image";
+import { generateImage } from "@/tools/generate-image";
 
 const tools = {
     generateImage,

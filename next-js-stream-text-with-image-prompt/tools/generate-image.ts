@@ -15,7 +15,7 @@ export const generateImage = tool({
         }
 
         const { image } = await experimental_generateImage({
-          model: openai.imageModel("dall-e-3", { apiKey: OPENAI_API_KEY }),
+          model: openai.imageModel("dall-e-3"),
           prompt,
         });
         return { image: image.base64, prompt}

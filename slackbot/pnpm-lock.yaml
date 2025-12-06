@@ -19,10 +19,13 @@ importers:
         version: 2.0.0
       ai:
         specifier: ^4.1.46
-        version: 4.1.47(react@19.0.0)(zod@3.24.2)
+        version: 4.1.47(react@19.2.1)(zod@3.24.2)
       exa-js:
         specifier: ^1.4.10
         version: 1.4.10
+      react:
+        specifier: 19.2.1
+        version: 19.2.1
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -291,8 +294,8 @@ packages:
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
-  react@19.0.0:
-    resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
+  react@19.2.1:
+    resolution: {integrity: sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==}
     engines: {node: '>=0.10.0'}
 
   retry@0.13.1:
@@ -362,14 +365,14 @@ snapshots:
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/react@1.1.19(react@19.0.0)(zod@3.24.2)':
+  '@ai-sdk/react@1.1.19(react@19.2.1)(zod@3.24.2)':
     dependencies:
       '@ai-sdk/provider-utils': 2.1.10(zod@3.24.2)
       '@ai-sdk/ui-utils': 1.1.16(zod@3.24.2)
-      swr: 2.3.2(react@19.0.0)
+      swr: 2.3.2(react@19.2.1)
       throttleit: 2.1.0
     optionalDependencies:
-      react: 19.0.0
+      react: 19.2.1
       zod: 3.24.2
 
   '@ai-sdk/ui-utils@1.1.16(zod@3.24.2)':
@@ -415,16 +418,16 @@ snapshots:
 
   '@vercel/functions@2.0.0': {}
 
-  ai@4.1.47(react@19.0.0)(zod@3.24.2):
+  ai@4.1.47(react@19.2.1)(zod@3.24.2):
     dependencies:
       '@ai-sdk/provider': 1.0.9
       '@ai-sdk/provider-utils': 2.1.10(zod@3.24.2)
-      '@ai-sdk/react': 1.1.19(react@19.0.0)(zod@3.24.2)
+      '@ai-sdk/react': 1.1.19(react@19.2.1)(zod@3.24.2)
       '@ai-sdk/ui-utils': 1.1.16(zod@3.24.2)
       '@opentelemetry/api': 1.9.0
       jsondiffpatch: 0.6.0
     optionalDependencies:
-      react: 19.0.0
+      react: 19.2.1
       zod: 3.24.2
 
   asynckit@0.4.0: {}
@@ -582,17 +585,17 @@ snapshots:
 
   proxy-from-env@1.1.0: {}
 
-  react@19.0.0: {}
+  react@19.2.1: {}
 
   retry@0.13.1: {}
 
   secure-json-parse@2.7.0: {}
 
-  swr@2.3.2(react@19.0.0):
+  swr@2.3.2(react@19.2.1):
     dependencies:
       dequal: 2.0.3
-      react: 19.0.0
-      use-sync-external-store: 1.4.0(react@19.0.0)
+      react: 19.2.1
+      use-sync-external-store: 1.4.0(react@19.2.1)
 
   throttleit@2.1.0: {}
 
@@ -602,9 +605,9 @@ snapshots:
 
   undici-types@6.19.8: {}
 
-  use-sync-external-store@1.4.0(react@19.0.0):
+  use-sync-external-store@1.4.0(react@19.2.1):
     dependencies:
-      react: 19.0.0
+      react: 19.2.1
 
   webidl-conversions@3.0.1: {}
 

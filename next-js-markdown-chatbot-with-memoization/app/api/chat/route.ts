@@ -1,4 +1,5 @@
 import { convertToModelMessages, streamText, type UIMessage } from 'ai';
+import { openai } from '@ai-sdk/openai';
 
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
@@ -6,7 +7,7 @@ export async function POST(req: Request) {
   const result = streamText({
     system:
       'You are a helpful assistant. Respond to the user in Markdown format.',
-    model: 'openai/gpt-4o',
+    model: openai('gpt-4o'),
     messages: convertToModelMessages(messages),
   });
 

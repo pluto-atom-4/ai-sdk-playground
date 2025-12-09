@@ -20,6 +20,7 @@ const MemoizedMarkdownBlock = memo(
 MemoizedMarkdownBlock.displayName = 'MemoizedMarkdownBlock';
 
 export const MemoizedMarkdown = memo(  ({ content, id }: { content: string; id: string }) => {
+  console.log(`MemoizedMarkdown render: id=${id}, contentLength=${content.length}`);
   const blocks = useMemo(() => parseMarkdownIntoBlocks(content), [content]);
 
   return blocks.map((block, index) => (

@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import styles from './page.module.css';
 
 export default function Page() {
   const [description, setDescription] = useState<string>();
   const [loading, setLoading] = useState(false);
 
   return (
-    <div>
+    <div className={styles.container}>
       <form
+        className={styles.form}
         action={async formData => {
           try {
             setLoading(true);
@@ -26,16 +28,25 @@ export default function Page() {
           }
         }}
       >
-        <div>
-          <label>Upload Image</label>
-          <input name="pdf" type="file" accept="application/pdf" />
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Upload PDF</label>
+          <input
+            className={styles.fileInput}
+            name="pdf"
+            type="file"
+            accept="application/pdf"
+          />
         </div>
-        <button type="submit" disabled={loading}>
-          Submit{loading && 'ing...'}
+        <button className={styles.button} type="submit" disabled={loading}>
+          {loading ? 'Submitting...' : 'Submit'}
         </button>
       </form>
       {description && (
-        <pre>{JSON.stringify(JSON.parse(description), null, 2)}</pre>
+        <div className={styles.resultContainer}>
+          <pre className={styles.resultPre}>
+            {JSON.stringify(JSON.parse(description), null, 2)}
+          </pre>
+        </div>
       )}
     </div>
   );

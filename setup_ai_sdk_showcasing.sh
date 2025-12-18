@@ -29,7 +29,8 @@ echo "📂 Creating directory: ./generated/docs-copilot"
 mkdir -p ./generated/docs-copilot
 
 # Step 3: Create GitHub Copilot agent instructions file
-INSTRUCTIONS_FILE="./generated/docs-copilot/.copilot-instructions.md"
+mkdir -p ./.github
+INSTRUCTIONS_FILE="./.github/.copilot-instructions.md"
 echo "✍️  Creating Copilot instructions file: $INSTRUCTIONS_FILE"
 
 cat > "$INSTRUCTIONS_FILE" << 'EOF'

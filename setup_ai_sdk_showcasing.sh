@@ -2,12 +2,12 @@
 set -euo pipefail
 
 # Script to set up GitHub Copilot agent configuration and dependencies
-# Usage: ./create_docs_setup__temp__.sh <target_directory>
+# Usage: ./setup_ai_sdk_showcasing.sh <target_directory>
 
 # Check if target directory is provided
 if [ $# -eq 0 ]; then
-  echo "Usage: ./create_docs_setup__temp__.sh <target_directory>" >&2
-  echo "Example: ./create_docs_setup__temp__.sh ./next-js-app-router" >&2
+  echo "Usage: ./setup_ai_sdk_showcasing.sh <target_directory>" >&2
+  echo "Example: ./setup_ai_sdk_showcasing.sh ./next-js-app-router" >&2
   exit 1
 fi
 
@@ -30,7 +30,7 @@ mkdir -p ./generated/docs-copilot
 
 # Step 3: Create GitHub Copilot agent instructions file
 mkdir -p ./.github
-INSTRUCTIONS_FILE="./.github/.copilot-instructions.md"
+INSTRUCTIONS_FILE="./.github/copilot-instructions.md"
 echo "✍️  Creating Copilot instructions file: $INSTRUCTIONS_FILE"
 
 cat > "$INSTRUCTIONS_FILE" << 'EOF'

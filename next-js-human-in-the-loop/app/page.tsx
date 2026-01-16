@@ -7,8 +7,12 @@ import {
   getStaticToolName,
 } from 'ai';
 import { useState } from 'react';
+import { useTheme } from './providers/ThemeProvider';
+import styles from './page.module.css';
 
 export default function Chat() {
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === 'dark';
   const { messages, addToolOutput, sendMessage } = useChat({
     transport: new DefaultChatTransport({
       api: '/api/chat',
@@ -17,14 +21,28 @@ export default function Chat() {
   const [input, setInput] = useState('');
 
   return (
-    <div className="flex flex-col h-screen bg-white">
-      <div className="flex-1 overflow-y-auto p-4">
+    <div className={styles.chatContainer}>
+      {/* Header with theme toggle */}
+      <div className={`${styles.headerContainer} ${isDark ? styles.darkHeaderBorder : styles.lightHeaderBorder}`}>
+        <h1 className={styles.title}>AI Chat</h1>
+        <button
+          onClick={toggleTheme}
+          className={styles.themeToggleButton}
+          aria-label="Toggle theme"
+          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
+      </div>
+
+      {/* Messages container */}
+      <div className={styles.messagesContainer}>
         {messages?.map(m => (
-          <div key={m.id} className="mb-4">
-            <strong className="text-lg">{`${m.role}: `}</strong>
+          <div key={m.id} className={styles.message}>
+            <strong className={styles.messageRole}>{`${m.role}: `}</strong>
             {m.parts?.map((part, i) => {
               if (part.type === 'text') {
-                return <div key={i} className="text-gray-700 ml-2">{part.text}</div>;
+                return <div key={i} className={isDark ? styles.darkText : styles.lightText}>{part.text}</div>;
               }
               if (isStaticToolUIPart(part)) {
                 const toolName = getStaticToolName(part);
@@ -37,11 +55,11 @@ export default function Chat() {
                 ) {
                   const input = part.input as { city: string };
                   return (
-                    <div key={toolCallId} className="bg-blue-50 border border-blue-200 rounded p-4 mt-2 ml-2">
-                      <p className="text-blue-900 mb-3">
+                    <div key={toolCallId} className={`${styles.toolConfirmation} ${isDark ? styles.darkConfirmation : styles.lightConfirmation}`}>
+                      <p className={styles.confirmationText}>
                         Get weather information for <strong>{input.city}</strong>?
                       </p>
-                      <div className="flex gap-2">
+                      <div className={styles.buttonGroup}>
                         <button
                           onClick={async () => {
                             await addToolOutput({
@@ -51,7 +69,7 @@ export default function Chat() {
                             });
                             sendMessage();
                           }}
-                          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                          className={`${styles.button} ${styles.confirmButton}`}
                         >
                           Yes
                         </button>
@@ -64,7 +82,7 @@ export default function Chat() {
                             });
                             sendMessage();
                           }}
-                          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                          className={`${styles.button} ${styles.denyButton}`}
                         >
                           No
                         </button>
@@ -79,7 +97,7 @@ export default function Chat() {
                   part.state === 'output-available'
                 ) {
                   return (
-                    <div key={toolCallId} className="bg-gray-100 rounded p-3 mt-2 ml-2 text-gray-700">
+                    <div key={toolCallId} className={`${styles.toolResult} ${isDark ? styles.darkResult : styles.lightResult}`}>
                       <strong>Tool Result:</strong> {String(part.output)}
                     </div>
                   );
@@ -91,6 +109,7 @@ export default function Chat() {
         ))}
       </div>
 
+      {/* Input form */}
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -99,18 +118,18 @@ export default function Chat() {
             setInput('');
           }
         }}
-        className="border-t border-gray-300 p-4 bg-gray-50"
+        className={`${styles.formContainer} ${isDark ? styles.darkBorder : styles.lightBorder}`}
       >
-        <div className="flex gap-2">
+        <div className={styles.inputGroup}>
           <input
             value={input}
             placeholder="Say something..."
             onChange={e => setInput(e.target.value)}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`${styles.input} ${isDark ? styles.darkInput : styles.lightInput}`}
           />
           <button
             type="submit"
-            className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            className={styles.sendButton}
           >
             Send
           </button>

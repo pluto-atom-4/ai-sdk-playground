@@ -1,19 +1,18 @@
-import { marked } from "marked";
 import { memo, useMemo } from "react";
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 function parseMarkdownIntoBlocks(markdown: string): string[] {
-  const tokens = marked.lexer(markdown);
-  return tokens.map(token => token.raw);
+  // Split by double newlines to preserve table structure
+  return markdown.split('\n\n').filter(block => block.trim());
 }
 
 const MemoizedMarkdownBlock = memo(
   ({ content }: { content: string }) => {
-    return <ReactMarkdown>{content}</ReactMarkdown>;
+    return <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>;
   },
   (prevProps, nextProps) => {
     return prevProps.content === nextProps.content;
-
   },
 );
 

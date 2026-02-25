@@ -13,10 +13,11 @@
     "@ai-sdk/react": "^2.0.109",
     "ai": "^5.0.108",
     "marked": "^17.0.1",
-    "next": "16.0.8",
+    "next": "16.1.5",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "zod": "^4.1.13"
   },
   "devDependencies": {
